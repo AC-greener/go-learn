@@ -14,9 +14,19 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-	io.Copy(os.Stdout, res.Body)
+	lg := logWriter{}
+	io.Copy(lg, res.Body)
+	// io.Copy(os.Stdout, res.Body)
 	// bs := make([]byte, 9999999)
 	// res.Body.Read(bs)
 	// fmt.Println(string(bs))
 
+}
+
+type logWriter struct{}
+
+func (logWriter) Write(bs []byte) (int, error) {
+	fmt.Println(string(bs))
+	fmt.Println("Just wrote this many bytes:", len(bs))
+	return len(bs), nil
 }
